@@ -84,7 +84,7 @@ def sampling(arguments):
 
         # Generate Random Upper-Left Coordinate for Sampling
         x_cord = random.randint(0, image.size[0] - pixels)
-        y_cord = random.randint(0, image.size[1] - pixels)
+        y_cord = random.randint(0, image.size[1] - pixels - 64)
 
         # Name for Images
         image_format = train_image_names[file_num][-4:]
@@ -109,7 +109,7 @@ def sampling(arguments):
 
         # Generate Random Upper-Left Coordinate for Sampling
         x_cord = random.randint(0, image.size[0] - pixels)
-        y_cord = random.randint(0, image.size[1] - pixels)
+        y_cord = random.randint(0, image.size[1] - pixels -64)
 
         # Name for Images
         image_format = validation_image_names[file_num][-4:]
