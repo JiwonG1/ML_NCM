@@ -151,7 +151,7 @@ def query(question):
             sys.exit(1)
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Creation of Datasets of Smaller Images via Random Cropping', usage = 'python sampling.py <dataset> <pixel_number> <training_image_number> <validation_image_number> --rename')
+    parser = argparse.ArgumentParser(description='Creation of Datasets of Smaller Images via Random Sampling', usage = 'python sampling.py <dataset> <pixel_number> <training_image_number> <validation_image_number> --rename')
     parser.add_argument('dataset', help='Name of Dataset from which to Crop Images')
     parser.add_argument('pixel_num', type=int, help='Side Length in Pixels of Images in New Dataset')
     parser.add_argument('split', type=int, help='Percentage of Validation Images in New Dataset (1-100)')
