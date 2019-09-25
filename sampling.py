@@ -7,7 +7,6 @@ python cropping.py <dataset> <pixel_number> <split> <training_image_number> <val
 """
 
 import os
-import glob
 import sys
 import time
 import random
@@ -16,8 +15,6 @@ import numpy as np
 from PIL import Image
 from shutil import rmtree
 
-#def npy_img(arguments):
-
 def sampling(arguments):
     if not os.path.isdir(os.path.join('./data', arguments.dataset)):
         print("Dataset '{0}' Does Not Exist!! \nSampling Aborted.".format(arguments.dataset))
@@ -25,12 +22,12 @@ def sampling(arguments):
 
     # Image Directory
     image_directroy = './data/{0}'.format(arguments.dataset)
-    #validation_directroy = './data/{0}/validate'.format(arguments.dataset)
 
     # Check validity of number
     if arguments.split > 100:
         print("Validation Image Number Can Not Over Whole Images!")
         sys.exit(1)
+
     # Input Image Directories
     try:
         split_num = int(round(len([name for name in os.listdir(image_directroy) if os.path.isfile(os.path.join(image_directroy, name)) and name[0] != '.'])*arguments.split / 100 ))
@@ -75,8 +72,6 @@ def sampling(arguments):
         os.makedirs(train_im_out_dir)
     if not os.path.isdir(val_im_out_dir):
         os.makedirs(val_im_out_dir)
-
-
 
     # Loop through all Images
     print("Creating Traing Images ({0}): \n".format(train_image_num))
