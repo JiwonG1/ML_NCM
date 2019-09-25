@@ -1,4 +1,7 @@
 """
+Folder Tree:
+./data/<Dataset Name>/images.jpg or png formats
+
 TO RUN:
 python cropping.py <dataset> <pixel_number> <split> <training_image_number> <validation_image_number> --rename
 """
