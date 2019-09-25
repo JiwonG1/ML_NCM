@@ -1,9 +1,10 @@
 """
 TO RUN:
-python cropping.py <dataset> <pixel_number> <training_image_number> <validation_image_number> --rename
+python cropping.py <dataset> <pixel_number> <split> <training_image_number> <validation_image_number> --rename
 """
 
 import os
+import glob
 import sys
 import time
 import random
@@ -19,15 +20,21 @@ def sampling(arguments):
         print("Dataset '{0}' Does Not Exist!! \nSampling Aborted.".format(arguments.dataset))
         sys.exit(1)
 
-    # Training and Validation Directories.
-    train_directroy = './data/{0}/train'.format(arguments.dataset)
-    validation_directroy = './data/{0}/validate'.format(arguments.dataset)
+    # Image Directory
+    image_directroy = './data/{0}'.format(arguments.dataset)
+    #validation_directroy = './data/{0}/validate'.format(arguments.dataset)
 
+    # Check validity of number
+    if arguments.split > 100:
+        print("Validation Image Number Can Not Over Whole Images!")
+        sys.exit(1)
     # Input Image Directories
     try:
-        train_image_names = os.listdir(train_directroy)
+        split_num = int(round(len([name for name in os.listdir(image_directroy) if os.path.isfile(os.path.join(image_directroy, name)) and name[0] != '.'])*arguments.split / 100 ))
+        dataset_names = [name for name in os.listdir(image_directroy) if os.path.isfile(os.path.join(image_directroy, name)) and name[0] != '.'] # Exclude .ds_Store file
+        train_image_names = dataset_names[split_num:]
         train_image_names.sort()
-        validation_image_names = os.listdir(validation_directroy)
+        validation_image_names = dataset_names[:split_num]
         validation_image_names.sort()
     except FileNotFoundError:
         print("Image Directories Does Not Exist!")
@@ -37,7 +44,7 @@ def sampling(arguments):
     pixels = arguments.pixel_num
     train_image_num = arguments.train_num
     validation_image_num = arguments.val_num
-    out_dir = './data/{0}_{1:d}pix_{2:d}'.format(arguments.dataset, pixels, train_image_num)
+    out_dir = './data/{0}_{1:d}pix_{2:d}num_{3:d}%'.format(arguments.dataset, pixels, train_image_num, arguments.split)
 
     # Get if Dataset Name from User if given rename flag
     if arguments.rename:
@@ -66,6 +73,8 @@ def sampling(arguments):
     if not os.path.isdir(val_im_out_dir):
         os.makedirs(val_im_out_dir)
 
+
+
     # Loop through all Images
     print("Creating Traing Images ({0}): \n".format(train_image_num))
     for num in range(train_image_num):
@@ -75,7 +84,7 @@ def sampling(arguments):
         file_num = random.randint(0, len(train_image_names)) - 1
 
         # Load Images Using PIL and Check the size
-        image = Image.open(os.path.join(train_directroy, train_image_names[file_num]))
+        image = Image.open(os.path.join(image_directroy, train_image_names[file_num]))
         if image.size[0] - pixels < 0 and image.size[1]-pixels < 0:
             print("Sampling Images Must be Samller than Full-Sized Images!",
                   "Image Size: {0:s}".format(image.size), sep='\n')
@@ -105,7 +114,7 @@ def sampling(arguments):
         file_num = random.randint(0, len(validation_image_names)) - 1
 
         # Load Images Using PIL
-        image = Image.open(os.path.join(validation_directroy, validation_image_names[file_num]))
+        image = Image.open(os.path.join(image_directroy, validation_image_names[file_num]))
 
         # Generate Random Upper-Left Coordinate for Sampling
         x_cord = random.randint(0, image.size[0] - pixels)
@@ -145,6 +154,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Creation of Datasets of Smaller Images via Random Cropping', usage = 'python sampling.py <dataset> <pixel_number> <training_image_number> <validation_image_number> --rename')
     parser.add_argument('dataset', help='Name of Dataset from which to Crop Images')
     parser.add_argument('pixel_num', type=int, help='Side Length in Pixels of Images in New Dataset')
+    parser.add_argument('split', type=int, help='Percentage of Validation Images in New Dataset (1-100)')
     parser.add_argument('train_num', type=int, help='Number of Training Images in New Dataset')
     parser.add_argument('val_num', type=int, help='Number of Validation Images in New Dataset')
     parser.add_argument('-r', '--rename', action='store_true', help='Rename the New Dataset', dest='rename')
