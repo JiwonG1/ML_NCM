@@ -1,9 +1,9 @@
 """
 Folder Tree:
-./data/<Dataset Name>/images.jpg or png formats
+./data/<Dataset Name>/images (jpg or png formats)
 
 TO RUN:
-python cropping.py <dataset> <pixel_number> <split> <training_image_number> <validation_image_number> --rename
+python sampling.py <dataset> <pixel_number> <split> <training_image_number> <validation_image_number> --rename
 """
 
 import os
@@ -31,7 +31,7 @@ def sampling(arguments):
     # Input Image Directories
     try:
         split_num = int(round(len([name for name in os.listdir(image_directroy) if os.path.isfile(os.path.join(image_directroy, name)) and name[0] != '.'])*arguments.split / 100 ))
-        dataset_names = [name for name in os.listdir(image_directroy) if os.path.isfile(os.path.join(image_directroy, name)) and name[0] != '.'] # Exclude .ds_Store file
+        dataset_names = [name for name in os.listdir(image_directroy) if os.path.isfile(os.path.join(image_directroy, name)) and name[0] != '.'] # Exclude .DS_Store file from MACOS
         train_image_names = dataset_names[split_num:]
         train_image_names.sort()
         validation_image_names = dataset_names[:split_num]

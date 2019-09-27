@@ -1,6 +1,8 @@
 # Data folder
 data/
 .DS_Store
+*.pptx
+*.ppt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
